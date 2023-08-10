@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Rome Total War Editor</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <!-- CSS/JS -->
+    <link rel="stylesheet" href="CSS/globals.css">
+    <link rel="stylesheet" href="CSS/index.css">
+    <script src="JS/globals.js" defer></script>
+    <script src="JS/index.js" defer></script>
+</head>
+
+<body>
+    <div class="title-bar">
+        <h1>Rome Total War Config Editor</h1>
+    </div>
+    <div class="row editor-list">
+        <div id="building-editor" class="container-fluid col-3 editors">
+            <div class="container-fluid editor-content">
+                <p class="editor-text">
+                    Building Editor
+                </p>
+            </div>
+        </div>
+        <div id="unit-editor" class="container-fluid col-3 editors">
+            <div class="container-fluid editor-content">
+                <p class="editor-text">
+                    Unit Editor
+                </p>
+            </div>
+        </div>
+        <div id="trait-editor" class="container-fluid col-3 editors">
+            <div class="container-fluid editor-content">
+                <p class="editor-text">
+                    Trait Editor
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row config-loaders">
+        <div class="container-fluid col-3 config-loader">
+            <input title="building-config-file" class="form-control config-input" type="file" id="building-config" name="building-config" accept=".txt">
+        </div>
+        <div class="container-fluid col-3 config-loader">
+            <input title="unit-config-file" class="form-control config-input" type="file" id="unit-config" name="unit-config" accept=".txt">
+        </div>
+        <div class="container-fluid col-3 config-loader">
+            <input title="trait-config-file" class="form-control config-input" type="file" id="trait-config" name="trait-config" accept=".txt">
+        </div>
+    </div>
+</body>
+
+</html>

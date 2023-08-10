@@ -1,0 +1,61 @@
+.editor-list,.config-loaders{
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    margin:auto;
+}
+.editors,.config-loader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height:70vh;
+    margin: 0 10px;
+    border-radius: 5px;
+    border-color: var(--text-color);
+    border-style: solid;
+    border-width: 2px;
+    padding: 0;
+}
+.editors:hover{
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+}
+.editor-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.editor-content:hover{
+    background-color:  rgba(0, 0, 0, 0.190);
+}
+.editor-text{
+    font-size: 1.5em;
+}
+#building-editor{
+    background-image: url(../IMG/building.jpeg);
+}
+#unit-editor{
+    background-image: url(../IMG/legionnaire.jpg);
+}
+#trait-editor{
+    background-image: url(../IMG/general.jpeg);
+}
+.config-loader{
+    height:auto;
+    border: none;
+    margin:4px 10px;
+    align-items: start;
+}
+.config-input,.config-input:focus{
+    font-family: var(--text-font);
+    border-color: var(--text-color);
+    color: var(--text-color);
+    background-color: var(--background-color);
+}

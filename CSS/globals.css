@@ -1,0 +1,35 @@
+:root {
+    /*** Global Variables ***/
+    --background-color: rgb(170, 0, 0);
+    --text-color: rgb(255, 200, 0);
+    --text-font: 'Times New Roman', Times, serif;
+    /*** Global Styles ***/
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    text-shadow: 2px 2px 2px black;
+    text-decoration: solid;
+}
+
+body {
+    /*** Global Body Styles ***/
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    font-family: var(--text-font);
+}
+
+.title-bar {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.form-control{
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border-color: var(--text-color);
+    font-family: var(--text-font);
+}
+textarea.form-control{
+    background-color: lightgray;
+}
