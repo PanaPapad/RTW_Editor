@@ -20,14 +20,14 @@ describe("UnitParser", () => {
 
   it("should parse inline sample", () => {
     const sample = `type test_unit
-dictionary test_unit
+dictionary test_unit ; Test Unit
 category infantry
 class light
 stat_pri 1, 0, no, 0, 0, melee, simple, piercing, knife, 25 ,1
 `;
     const units = UnitParser.parse(sample);
     expect(units).toHaveLength(1);
-    expect(units[0].name).toBe("test_unit");
+    expect(units[0].name).toBe("Test Unit");
     expect(units[0].attributes.category).toEqual(["infantry"]);
     expect(units[0].getUnitProperty("stat_pri", 2)).toBe("no");
     expect(units[0].getUnitProperty("stat_pri", 3)).toBe("0");
