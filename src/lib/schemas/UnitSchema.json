@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Unit Schema for RTW Editor",
+  "definitions": {
+    "stat_pri": {
+      "type": "object",
+      "title": "Primary Attack",
+      "properties": {
+        "attack": {
+          "type": "integer",
+          "min": 1,
+          "title": "Attack"
+        },
+        "charge": {
+          "type": "integer",
+          "min": 0,
+          "title": "Charge Bonus"
+        },
+        "missile_type": {
+          "type": "string",
+          "default": "no",
+          "enum": [
+            "no",
+            "javelin",
+            "arrow",
+            "scorpion",
+            "ballista",
+            "boulder",
+            "head",
+            "pilum",
+            "bullet",
+            "stone"
+          ]
+        },
+        "missile_range": {
+          "type": "integer",
+          "min": 0,
+          "title": "Missile Range"
+        },
+        "ammo": {
+          "type": "integer",
+          "min": 0,
+          "title": "Ammo"
+        },
+        "weapon_type": {
+          "type": "string",
+          "default": "melee",
+          "enum": ["melee", "thrown", "missile", "siege_missile"],
+          "title": "Weapon Type"
+        },
+        "tech": {
+          "type": "string",
+          "default": "simple",
+          "enum": ["simple", "other", "blade", "archery", "siege"],
+          "title": "Tech"
+        },
+        "damage_type": {
+          "type": "string",
+          "default": "piercing",
+          "enum": ["piercing", "blunt", "slashing", "fire"]
+        },
+        "sound_type": {
+          "type": "string",
+          "default": "none",
+          "enum": ["none", "knife", "mace", "axe", "sword", "spear"],
+          "title": "Sound Type"
+        },
+        "attack_delay": {
+          "type": "integer",
+          "min": 1
+        }
+      },
+      "required": [
+        "attack",
+        "charge",
+        "missile_type",
+        "missile_range",
+        "ammo",
+        "weapon_type",
+        "tech",
+        "damage_type",
+        "sound_type",
+        "attack_delay"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "stat_pri": {
+      "$ref": "#/definitions/stat_pri"
+    }
+  },
+  "allOf": [{}],
+  "required": []
+}
