@@ -8,12 +8,12 @@
       "properties": {
         "attack": {
           "type": "integer",
-          "min": 1,
+          "minimum": 1,
           "title": "Attack"
         },
         "charge": {
           "type": "integer",
-          "min": 0,
+          "minimum": 0,
           "title": "Charge Bonus"
         },
         "missile_type": {
@@ -34,12 +34,12 @@
         },
         "missile_range": {
           "type": "integer",
-          "min": 0,
+          "minimum": 0,
           "title": "Missile Range"
         },
         "ammo": {
           "type": "integer",
-          "min": 0,
+          "minimum": 0,
           "title": "Ammo"
         },
         "weapon_type": {
@@ -67,7 +67,7 @@
         },
         "attack_delay": {
           "type": "integer",
-          "min": 1
+          "minimum": 1
         }
       },
       "required": [
@@ -81,6 +81,37 @@
         "damage_type",
         "sound_type",
         "attack_delay"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "not": {
+              "properties": {
+                "missile_type": { "const": "no" }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ammo": { "minimum": 1 },
+              "missile_range": { "minimum": 1 }
+            }
+          },
+          "else": {
+            "properties": {
+              "ammo": {
+                "readOnly": true,
+                "minimum": 0,
+                "maximum": 0
+              },
+              "missile_range": {
+                "readOnly": true,
+                "minimum": 0,
+                "maximum": 0
+              }
+            }
+          }
+        }
       ]
     }
   },
