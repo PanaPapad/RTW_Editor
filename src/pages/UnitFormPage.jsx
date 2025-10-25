@@ -31,7 +31,15 @@ export default function UnitFormPage() {
     setFormData(initialData);
   }, [schema, navigate]);
 
-  const onChange = useCallback((e) => setFormData(e.formData), []);
+  const onChange = useCallback(
+    (e) => {
+      setFormData(e.formData);
+      if (selectedUnit) {
+        selectedUnit.loadFormData(e.formData, schema);
+      }
+    },
+    [selectedUnit, schema]
+  );
   const onSubmit = useCallback(({ formData }) => {}, []);
 
   // No render if schema is not found
@@ -53,11 +61,17 @@ export default function UnitFormPage() {
           Reset
         </button>
       </div>
-      <div id="unitList" className="top">
-        <ItemList items={loadedUnits} />
-      </div>
       <div className="panel" style={{ display: "flex", gap: 16 }}>
-        <div className="left" style={{ flex: 1 }}>
+        <div id="unitList" className="left">
+          <ItemList
+            items={loadedUnits}
+            onSelect={(unit) => {
+              setSelectedUnit(unit);
+              setFormData(unit.getFormData(schema));
+            }}
+          />
+        </div>
+        <div className="centre">
           <Form
             schema={schema}
             validator={validator}
@@ -67,7 +81,7 @@ export default function UnitFormPage() {
             onSubmit={onSubmit}
           />
         </div>
-        <div className="right" style={{ width: 360 }}>
+        <div className="right">
           <h4>Live formData</h4>
           <pre>{JSON.stringify(formData, null, 2)}</pre>
           <h4>Computed uiSchema</h4>
