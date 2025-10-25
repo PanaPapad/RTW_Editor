@@ -1,13 +1,13 @@
 /**
- * @typedef {Object} SchemaProperty
+ * @typedef {Object} UnitSchemaProperty
  * @property {string} [type]
  * @property {string} [$ref]
- * @property {Object<string, SchemaProperty>} [properties]
+ * @property {Object<string, UnitSchemaProperty>} [properties]
  * @property {number} [x-index]
  */
 /**
- * @typedef {Object} Schema
- * @property {Object<string, SchemaProperty>} properties
+ * @typedef {Object} UnitSchema
+ * @property {Object<string, UnitSchemaProperty>} properties
  * @property {Array<string>} required
  * @property {Array<string>} [additionalProperties]
  */
