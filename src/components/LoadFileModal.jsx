@@ -29,6 +29,7 @@ export default function LoadModal({ open, onClose, onLoad }) {
       if (!units || units.length === 0) {
         setError("Parser returned no units from the provided file.");
       } else {
+        onLoad(units);
         onClose();
       }
     } catch (err) {
