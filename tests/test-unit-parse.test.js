@@ -5,7 +5,7 @@ import { UnitParser } from "../src/lib/parsers/UnitParser.js";
 
 describe("UnitParser", () => {
   it("should parse sample export_descr_unit.txt", () => {
-    const samplePath = path.resolve("Samples/export_descr_unit.txt");
+    const samplePath = path.resolve("public/Samples/export_descr_unit.txt");
     expect(fs.existsSync(samplePath), "Sample file should exist").toBe(true);
 
     const text = fs.readFileSync(samplePath, "utf8");
