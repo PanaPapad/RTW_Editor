@@ -9,12 +9,14 @@
         "attack": {
           "type": "integer",
           "minimum": 1,
-          "title": "Attack"
+          "title": "Attack",
+          "x-index": 0
         },
         "charge": {
           "type": "integer",
           "minimum": 0,
-          "title": "Charge Bonus"
+          "title": "Charge Bonus",
+          "x-index": 1
         },
         "missile_type": {
           "type": "string",
@@ -30,43 +32,54 @@
             "pilum",
             "bullet",
             "stone"
-          ]
+          ],
+          "title": "Missile Type",
+          "x-index": 2
         },
         "missile_range": {
           "type": "integer",
           "minimum": 0,
-          "title": "Missile Range"
+          "title": "Missile Range",
+          "x-index": 3
         },
         "ammo": {
           "type": "integer",
           "minimum": 0,
-          "title": "Ammo"
+          "title": "Ammo",
+          "x-index": 4
         },
         "weapon_type": {
           "type": "string",
           "default": "melee",
           "enum": ["melee", "thrown", "missile", "siege_missile"],
-          "title": "Weapon Type"
+          "title": "Weapon Type",
+          "x-index": 5
         },
         "tech": {
           "type": "string",
           "default": "simple",
           "enum": ["simple", "other", "blade", "archery", "siege"],
-          "title": "Tech"
+          "title": "Tech",
+          "x-index": 6
         },
         "damage_type": {
           "type": "string",
           "default": "piercing",
-          "enum": ["piercing", "blunt", "slashing", "fire"]
+          "enum": ["piercing", "blunt", "slashing", "fire"],
+          "title": "Damage Type",
+          "x-index": 7
         },
         "sound_type": {
           "type": "string",
           "default": "none",
           "enum": ["none", "knife", "mace", "axe", "sword", "spear"],
-          "title": "Sound Type"
+          "title": "Sound Type",
+          "x-index": 8
         },
         "attack_delay": {
           "type": "integer",
+          "title": "Attack Delay",
+          "x-index": 9,
           "minimum": 1
         }
       },
