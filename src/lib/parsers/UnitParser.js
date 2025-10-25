@@ -8,7 +8,8 @@ export class Unit {
    * @param {string} name The unit name
    * @param {Array<string>} lines The raw lines of the unit
    */
-  constructor(name, lines) {
+  constructor(id, name, lines) {
+    this.id = id;
     this.name = name;
     /**
      * Original raw lines (copy)
@@ -185,6 +186,7 @@ export class UnitParser {
     /** @type {Array<string>} */
     let currentLines = [];
     let currentName = null;
+    let currentId = null;
 
     for (let raw of lines) {
       const l = raw;
@@ -193,11 +195,13 @@ export class UnitParser {
       if (trimmed.startsWith("type ")) {
         // flush previous
         if (currentLines.length && currentName !== null) {
-          units.push(new Unit(currentName, currentLines));
+          units.push(new Unit(currentId, currentName, currentLines));
           currentLines = [];
         }
+      } else if (trimmed.startsWith("dictionary ")) {
         // extract name after first space
-        const name = trimmed.split(/\s+/, 2)[1] ?? "";
+        currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
+        const name = trimmed.split(";", 2)[1].trim() ?? "";
         currentName = name;
       }
       if (currentName !== null) {
@@ -206,7 +210,7 @@ export class UnitParser {
     }
     // final flush
     if (currentLines.length && currentName !== null) {
-      units.push(new Unit(currentName, currentLines));
+      units.push(new Unit(currentId, currentName, currentLines));
     }
     return units;
   }
