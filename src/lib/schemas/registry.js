@@ -1,10 +1,11 @@
 import UnitSchema from "./UnitSchema.json";
 
 /**
- * @type {Record<string, {schema: object, uiSchema: object, initialData: object}>}
+ * @type {Record<string, {sampleFilePath: string, schema: object, uiSchema: object, initialData: object}>}
  */
 const registry = {
   units: {
+    sampleFilePath: "/Samples/export_descr_unit.txt",
     schema: (() => {
       const s = structuredClone(UnitSchema);
       // remove $schema to avoid ajv remote fetch
