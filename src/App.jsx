@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import UnitSchema from "./lib/schemas/UnitSchema.json";
-import FormPage from "./pages/FormPage.jsx";
+import UnitFormPage from "./pages/UnitFormPage.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 
 function Header() {
@@ -32,7 +31,7 @@ export default function App() {
         <main style={{ padding: 12 }}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/editor/:type" element={<FormPage />} />
+            <Route path="/editor/units" element={<UnitFormPage />} />
             <Route path="*" element={<LandingPage />} />
           </Routes>
         </main>
