@@ -1,3 +1,4 @@
+import "../types.d.js";
 /**
  * A class representing a Unit with its attributes
  */
@@ -8,7 +9,8 @@ export class Unit {
    * @param {string} name The unit name
    * @param {Array<string>} lines The raw lines of the unit
    */
-  constructor(name, lines) {
+  constructor(id, name, lines) {
+    this.id = id;
     this.name = name;
     /**
      * Original raw lines (copy)
@@ -170,6 +172,120 @@ export class Unit {
     prop[idx] = String(value);
     return true;
   }
+  /**
+   * Resolve a local JSON Schema reference.
+   * This supports only local refs like '#/definitions/...' within the same schema.
+   * @param {UnitSchema} rootSchema The root schema
+   * @param {string} ref The reference string
+   * @returns {UnitSchemaProperty|null} The resolved schema property or null if not found
+   */
+  static resolveLocalRef(rootSchema, ref) {
+    if (typeof ref !== "string") return null;
+    if (!ref.startsWith("#/")) return null; // only local refs supported here
+    const parts = ref.slice(2).split("/");
+    let node = rootSchema;
+    for (const p of parts) {
+      // Traverse down the schema until the referenced node is found
+      if (node && Object.prototype.hasOwnProperty.call(node, p)) {
+        node = node[p];
+      } else {
+        node = null;
+        break;
+      }
+    }
+    // If the referenced node is not found, return null
+    if (node == null) return null;
+    // Deep clone to avoid accidental mutation of original schema
+    try {
+      return JSON.parse(JSON.stringify(node));
+    } catch (e) {
+      return node;
+    }
+  }
+  /**
+   * Get form data for this unit based on provided schema
+   * @param {UnitSchema} schema
+   * @returns {Object} The form data object
+   */
+  getFormData(schema) {
+    const data = {};
+    for (const key of Object.keys(schema.properties)) {
+      const attr = this.attributes[key];
+      if (!attr) continue;
+      // Resolve $ref if present (support local refs like '#/definitions/...')
+      let propSchema = schema.properties[key];
+
+      if (propSchema && propSchema.$ref) {
+        const resolved = Unit.resolveLocalRef(schema, propSchema.$ref);
+        if (resolved) propSchema = resolved;
+      }
+      // If the property schema is an object with properties (like stat_pri), map each named
+      // sub-property using its x-index metadata into the corresponding index in attr (array)
+      if (
+        propSchema &&
+        propSchema.properties &&
+        typeof propSchema.properties === "object"
+      ) {
+        data[key] = {};
+        for (const [subName, subSchema] of Object.entries(
+          propSchema.properties
+        )) {
+          const idx =
+            subSchema["x-index"] ?? subSchema.index ?? subSchema["x_index"];
+          if (typeof idx === "number") {
+            data[key][subName] = attr[idx] !== undefined ? attr[idx] : null;
+          } else {
+            // no index mapping; try a sensible fallback: use first element
+            data[key][subName] = attr[0] !== undefined ? attr[0] : null;
+          }
+        }
+      } else {
+        // primitive or unstructured attribute: expose as single value (first element)
+        data[key] = attr[0] !== undefined ? attr[0] : null;
+      }
+    }
+    return data;
+  }
+  /**
+   * Set unit properties from form data based on provided schema
+   * @param {Object} formData The form data object
+   * @param {UnitSchema} schema The JSON Schema of the form
+   */
+  loadFormData(formData, schema) {
+    for (const key of Object.keys(formData)) {
+      const formAttr = formData[key];
+      const attr = this.attributes[key];
+      if (!attr) continue; // skip unknown attributes
+
+      let attrSchema = schema.properties[key];
+      // Resolve $ref if present
+      if (attrSchema && attrSchema.$ref) {
+        const resolved = Unit.resolveLocalRef(schema, attrSchema.$ref);
+        if (resolved) attrSchema = resolved;
+      }
+
+      // If attribute schema is type object then map sub-properties
+      if (
+        attrSchema &&
+        attrSchema.properties &&
+        typeof attrSchema.properties === "object"
+      ) {
+        for (const [propName, propSchema] of Object.entries(
+          attrSchema.properties
+        )) {
+          // Get the x-index for this sub-property and set the corresponding attr index
+          const idx = propSchema["x-index"];
+          if (typeof idx === "number" && formAttr && propName in formAttr) {
+            attr[idx] = String(formAttr[propName]);
+          }
+        }
+      }
+      // If the property schema is not an object, treat it as a primitive
+      else {
+        attr[0] = String(formAttr);
+      }
+    }
+  }
 }
 
 export class UnitParser {
@@ -185,6 +301,7 @@ export class UnitParser {
     /** @type {Array<string>} */
     let currentLines = [];
     let currentName = null;
+    let currentId = null;
 
     for (let raw of lines) {
       const l = raw;
@@ -193,11 +310,13 @@ export class UnitParser {
       if (trimmed.startsWith("type ")) {
         // flush previous
         if (currentLines.length && currentName !== null) {
-          units.push(new Unit(currentName, currentLines));
+          units.push(new Unit(currentId, currentName, currentLines));
           currentLines = [];
         }
+      } else if (trimmed.startsWith("dictionary ")) {
         // extract name after first space
-        const name = trimmed.split(/\s+/, 2)[1] ?? "";
+        currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
+        const name = trimmed.split(";", 2)[1].trim() ?? "";
         currentName = name;
       }
       if (currentName !== null) {
@@ -206,7 +325,7 @@ export class UnitParser {
     }
     // final flush
     if (currentLines.length && currentName !== null) {
-      units.push(new Unit(currentName, currentLines));
+      units.push(new Unit(currentId, currentName, currentLines));
     }
     return units;
   }
