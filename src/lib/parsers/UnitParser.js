@@ -130,6 +130,25 @@ export class Unit {
         this.ethnicities.push(values);
         continue;
       }
+      // Officers special handling (can appear multiple times)
+      if (key === "officer") {
+        if (!this.attributes.officer) {
+          this.attributes.officer = [];
+        }
+        const rest = parts[1] ?? "";
+        this.attributes.officer.push(rest);
+        continue;
+      }
+      // Stat attributes special handling (attributes are space-separated)
+      if (key === "stat_pri_attr" || key === "stat_sec_attr") {
+        const rest = parts[1] ?? "";
+        const values = rest
+          .split(" ")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        attributes[key] = values;
+        continue;
+      }
       // boolean flag (no value)
       if (parts.length === 1) {
         attributes[key] = [];
@@ -232,16 +251,22 @@ export class Unit {
         )) {
           const idx =
             subSchema["x-index"] ?? subSchema.index ?? subSchema["x_index"];
-          if (typeof idx === "number") {
-            data[key][subName] = attr[idx] !== undefined ? attr[idx] : null;
+          if (typeof idx === "number" && attr[idx]) {
+            data[key][subName] = attr[idx];
           } else {
             // no index mapping; try a sensible fallback: use first element
-            data[key][subName] = attr[0] !== undefined ? attr[0] : null;
+            attr[0] && !idx && (data[key][subName] = attr[0]);
           }
         }
+      } else if (
+        propSchema &&
+        propSchema.type === "array" &&
+        propSchema.items
+      ) {
+        attr && (data[key] = attr);
       } else {
         // primitive or unstructured attribute: expose as single value (first element)
-        data[key] = attr[0] !== undefined ? attr[0] : null;
+        attr[0] && (data[key] = attr[0]);
       }
     }
     return data;
@@ -278,6 +303,16 @@ export class Unit {
           if (typeof idx === "number" && formAttr && propName in formAttr) {
             attr[idx] = String(formAttr[propName]);
           }
+        }
+      }
+      // If the property schema is an array, treat formAttr as array
+      else if (
+        attrSchema &&
+        attrSchema.type === "array" &&
+        Array.isArray(formAttr)
+      ) {
+        for (let i = 0; i < formAttr.length; i++) {
+          attr[i] = String(formAttr[i]);
         }
       }
       // If the property schema is not an object, treat it as a primitive
