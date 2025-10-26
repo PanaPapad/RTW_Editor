@@ -336,7 +336,7 @@ export class UnitParser {
    * @returns {string}
    */
   static serialize(units) {
-    // join each unit's toString and separate by two blank lines (with a single space line like Python version)
+    // join each unit's toString and separate by two blank lines
     return (
       units.map((u) => u.toString()).join("\n \n \n") +
       (units.length ? "\n" : "")

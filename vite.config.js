@@ -8,4 +8,10 @@ export default defineConfig({
       jsxRuntime: "automatic",
     }),
   ],
+  resolve: {
+    alias: {
+      // Alias for easier imports
+      "@lib": "/src/lib",
+    },
+  },
 });

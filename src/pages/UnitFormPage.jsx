@@ -1,10 +1,12 @@
 import { useCallback, useState, useMemo, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
 import * as SchemaRegistry from "../lib/schemas/registry.js";
 import LoadModal from "../components/LoadFileModal.jsx";
 import ItemList from "../components/ItemList.jsx";
+import { UnitParser } from "../lib/parsers/UnitParser.js";
+import * as Common from "@lib/index.js";
 
 const TYPE = "units";
 
@@ -31,7 +33,12 @@ export default function UnitFormPage() {
     setFormData(initialData);
   }, [schema, navigate]);
 
-  const onChange = useCallback(
+  const downloadEditedFile = useCallback(() => {
+    const text = UnitParser.serialize(loadedUnits);
+    Common.downloadFile("edited_units.txt", text);
+  }, [loadedUnits]);
+
+  const onFormChange = useCallback(
     (e) => {
       setFormData(e.formData);
       if (selectedUnit) {
@@ -40,7 +47,7 @@ export default function UnitFormPage() {
     },
     [selectedUnit, schema]
   );
-  const onSubmit = useCallback(({ formData }) => {}, []);
+  const onFormSubmit = useCallback(({ formData }) => {}, []);
 
   // No render if schema is not found
   if (!schema) {
@@ -50,7 +57,7 @@ export default function UnitFormPage() {
   return (
     <div>
       <h2>RTW Unit Editor</h2>
-      <div style={{ marginBottom: 10 }}>
+      <div style={{ display: "flex", marginBottom: 10 }}>
         <button onClick={() => setModalOpen(true)}>Load File</button>{" "}
         <button
           onClick={() => {
@@ -60,6 +67,7 @@ export default function UnitFormPage() {
         >
           Reset
         </button>
+        <button onClick={downloadEditedFile}>Download</button>
       </div>
       <div className="panel" style={{ display: "flex", gap: 16 }}>
         <div id="unitList" className="left">
@@ -77,8 +85,8 @@ export default function UnitFormPage() {
             validator={validator}
             uiSchema={uiSchema}
             formData={formData}
-            onChange={onChange}
-            onSubmit={onSubmit}
+            onChange={onFormChange}
+            onSubmit={onFormSubmit}
           />
         </div>
         <div className="right">
