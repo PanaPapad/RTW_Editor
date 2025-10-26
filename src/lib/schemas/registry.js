@@ -1,4 +1,5 @@
 import UnitSchema from "./UnitSchema.json";
+import UnitUiSchema from "./UnitUiSchema.json";
 
 /**
  * @type {Record<string, {sampleFilePath: string, schema: object, uiSchema: object, initialData: object}>}
@@ -12,7 +13,12 @@ const registry = {
       if (s && s.$schema) delete s.$schema;
       return s;
     })(),
-    uiSchema: {},
+    uiSchema: (() => {
+      const s = structuredClone(UnitUiSchema);
+      // remove $schema to avoid ajv remote fetch
+      if (s && s.$schema) delete s.$schema;
+      return s;
+    })(),
     initialData: {},
   },
 };
