@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       // Alias for easier imports
       "@lib": "/src/lib",
+      "@components": "/src/components",
     },
   },
 });
