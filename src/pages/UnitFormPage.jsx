@@ -1,12 +1,11 @@
-import { useCallback, useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { ItemList, LoadModal, TextWidget } from "@components/index.jsx";
+import * as Common from "@lib/index.js";
+import { UnitParser } from "@lib/parsers/UnitParser.js";
+import * as SchemaRegistry from "@lib/schemas/registry.js";
 import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
-import * as SchemaRegistry from "../lib/schemas/registry.js";
-import LoadModal from "../components/LoadFileModal.jsx";
-import ItemList from "../components/ItemList.jsx";
-import { UnitParser } from "../lib/parsers/UnitParser.js";
-import * as Common from "@lib/index.js";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const TYPE = "units";
 
@@ -16,6 +15,15 @@ export default function UnitFormPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [loadedUnits, setLoadedUnits] = useState([]);
   const [selectedUnit, setSelectedUnit] = useState(null);
+
+  const formRef = useRef(null);
+
+  const widgets = useMemo(
+    () => ({
+      TextWidget,
+    }),
+    []
+  );
 
   const schema = useMemo(() => {
     return SchemaRegistry.getSchemaFor(TYPE);
@@ -100,10 +108,12 @@ export default function UnitFormPage() {
         </div>
         <div className="centre">
           <Form
+            ref={formRef}
             schema={schema}
             validator={validator}
             uiSchema={computedUiSchema}
             formData={formData}
+            widgets={widgets}
             onChange={onFormChange}
             onSubmit={onFormSubmit}
           />
