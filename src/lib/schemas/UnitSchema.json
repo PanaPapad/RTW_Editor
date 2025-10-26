@@ -4,7 +4,6 @@
   "definitions": {
     "stat_pri": {
       "type": "object",
-      "title": "Primary Attack",
       "properties": {
         "attack": {
           "type": "integer",
@@ -126,12 +125,406 @@
           }
         }
       ]
+    },
+    "stat_pri_attr": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ap",
+          "bp",
+          "spear",
+          "long_pike",
+          "short_pike",
+          "prec",
+          "thrown",
+          "launching",
+          "area"
+        ]
+      }
     }
   },
   "type": "object",
   "properties": {
+    "type": {
+      "$comment": "The internal name of the unit. Note this not necessarily the same as the on screen name",
+      "readOnly": true,
+      "type": "string",
+      "default": "unit",
+      "title": "Unit ID"
+    },
+    "dictionary": {
+      "readOnly": true,
+      "$comment": "The tag used to look up the on screen name",
+      "type": "string",
+      "title": "Unit Tag"
+    },
+    "category": {
+      "x-hide": true,
+      "readOnly": true,
+      "type": "string",
+      "enum": [
+        "infantry",
+        "cavalry",
+        "siege",
+        "handler",
+        "ship",
+        "non_combatant"
+      ],
+      "title": "Category"
+    },
+    "class": {
+      "readOnly": true,
+      "type": "string",
+      "enum": ["light", "heavy", "missile", "spearmen"],
+      "title": "Class"
+    },
+    "voice_type": {
+      "type": "string",
+      "readOnly": true,
+      "title": "Voice Type"
+    },
+    "soldier": {
+      "readOnly": true,
+      "type": "object",
+      "title": "Solider Model",
+      "properties": {
+        "model": {
+          "readOnly": true,
+          "type": "string",
+          "title": "Model",
+          "x-index": 0
+        },
+        "unit_size": {
+          "readOnly": true,
+          "type": "integer",
+          "title": "Unit Size",
+          "x-index": 1
+        },
+        "extras_size": {
+          "readOnly": true,
+          "type": "integer",
+          "title": "Extras Size",
+          "x-index": 2
+        },
+        "collision_mass": {
+          "readOnly": true,
+          "type": "number",
+          "title": "Collision Mass",
+          "x-index": 3
+        }
+      }
+    },
+    "officer": {
+      "readOnly": true,
+      "type": "array",
+      "title": "Officer Models",
+      "items": {
+        "type": "string",
+        "title": "Officer Model"
+      }
+    },
+    "ship": {
+      "readOnly": true,
+      "type": "string",
+      "title": "Type of Ship"
+    },
+    "engine": {
+      "readOnly": true,
+      "type": "string",
+      "title": "Siege Engine"
+    },
+    "animal": {
+      "readOnly": true,
+      "type": "string",
+      "title": "Non-ridden Animal"
+    },
+    "mount": {
+      "readOnly": true,
+      "type": "string",
+      "title": "Animal/Vehicle"
+    },
+    "mount_effect": {
+      "readOnly": true,
+      "type": "array",
+      "title": "Mount Effect",
+      "items": {
+        "type": "string"
+      }
+    },
+    "attributes": {
+      "type": "array",
+      "title": "Attributes",
+      "items": {
+        "type": "string",
+        "enum": [
+          "sea_faring",
+          "hide_forest",
+          "can_sap",
+          "frighten_foot",
+          "can_run_amok",
+          "general_unit",
+          "cantabrian_circle",
+          "no_custom",
+          "command",
+          "mercenary_unit",
+          "hardy",
+          "very_hardy",
+          "warcry",
+          "druid"
+        ]
+      }
+    },
+    "formation": {
+      "readOnly": true,
+      "type": "object",
+      "title": "Formation",
+      "properties": {
+        "spacing_side_tight": {
+          "readOnly": true,
+          "type": "number",
+          "title": "Spacing Side",
+          "x-index": 0
+        },
+        "spacing_front_tight": {
+          "readOnly": true,
+          "type": "number",
+          "title": "Spacing Front",
+          "x-index": 1
+        },
+        "spacing_side_loose": {
+          "readOnly": true,
+          "type": "number",
+          "title": "Spacing Side",
+          "x-index": 2
+        },
+        "spacing_front_loose": {
+          "readOnly": true,
+          "type": "number",
+          "title": "Spacing Front",
+          "x-index": 3
+        },
+        "ranks": {
+          "readOnly": true,
+          "type": "integer",
+          "title": "Ranks",
+          "x-index": 4
+        },
+        "formations_1": {
+          "readOnly": true,
+          "type": "string",
+          "title": "Formations 1",
+          "x-index": 5
+        },
+        "formations_2": {
+          "readOnly": true,
+          "type": "string",
+          "title": "Formations 2",
+          "x-index": 6
+        }
+      }
+    },
+    "stat_health": {
+      "type": "object",
+      "title": "Health Stats",
+      "properties": {
+        "hitpoints": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Hitpoints",
+          "x-index": 0
+        },
+        "hitpoints_mount": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Hitpoints (Mount)",
+          "x-index": 1
+        }
+      }
+    },
     "stat_pri": {
+      "title": "Primary Attack",
       "$ref": "#/definitions/stat_pri"
+    },
+    "stat_pri_attr": {
+      "title": "Primary Attack Attributes",
+      "$ref": "#/definitions/stat_pri_attr"
+    },
+    "stat_sec": {
+      "title": "Secondary Attack",
+      "$ref": "#/definitions/stat_pri"
+    },
+    "stat_sec_attr": {
+      "title": "Secondary Attack Attributes",
+      "$ref": "#/definitions/stat_pri_attr"
+    },
+    "stat_pri_armour": {
+      "type": "object",
+      "title": "Primary Armour",
+      "properties": {
+        "armour": { "type": "integer", "title": "Armour", "x-index": 0 },
+        "defence_skill": {
+          "type": "integer",
+          "title": "Defence Skill",
+          "x-index": 1
+        },
+        "shield": { "type": "integer", "title": "Shield", "x-index": 2 },
+        "sound_type": {
+          "type": "string",
+          "title": "Sound Type",
+          "x-index": 3,
+          "enum": ["flesh", "leather", "wood", "metal"]
+        }
+      }
+    },
+    "stat_sec_armour": {
+      "type": "object",
+      "title": "Secondary Armour",
+      "properties": {
+        "armour": { "type": "integer", "title": "Armour", "x-index": 0 },
+        "defence_skill": {
+          "type": "integer",
+          "title": "Defence Skill",
+          "x-index": 1
+        },
+        "sound_type": {
+          "type": "string",
+          "title": "Sound Type",
+          "x-index": 2,
+          "enum": ["flesh", "leather", "wood", "metal"]
+        }
+      }
+    },
+    "stat_heat": {
+      "type": "integer",
+      "title": "Heat Fatigue",
+      "x-index": 0
+    },
+    "stat_ground": {
+      "type": "object",
+      "title": "Ground Modifiers",
+      "properties": {
+        "scrub": {
+          "type": "integer",
+          "title": "Scrub",
+          "x-index": 0
+        },
+        "sand": {
+          "type": "integer",
+          "title": "Sand",
+          "x-index": 1
+        },
+        "forest": {
+          "type": "integer",
+          "title": "Forest",
+          "x-index": 2
+        },
+        "snow": {
+          "type": "integer",
+          "title": "Snow",
+          "x-index": 3
+        }
+      }
+    },
+    "stat_mental": {
+      "type": "object",
+      "title": "Mental Stats",
+      "properties": {
+        "morale": {
+          "type": "integer",
+          "title": "Morale",
+          "x-index": 0
+        },
+        "discipline": {
+          "type": "string",
+          "title": "Discipline",
+          "x-index": 1,
+          "enum": ["normal", "low", "disciplined", "impetuous"]
+        },
+        "training": {
+          "type": "string",
+          "title": "Training",
+          "x-index": 2
+        }
+      }
+    },
+    "stat_charge_dist": {
+      "readOnly": true,
+      "type": "integer",
+      "title": "Charge Distance",
+      "x-index": 0
+    },
+    "stat_fire_delay": {
+      "readOnly": true,
+      "type": "integer",
+      "title": "Fire Delay",
+      "x-index": 0
+    },
+    "stat_food": {
+      "readOnly": true,
+      "type": "object",
+      "title": "Food Stats",
+      "properties": {
+        "food_1": { "type": "integer", "title": "Food 1", "x-index": 0 },
+        "food_2": { "type": "integer", "title": "Food 2", "x-index": 1 }
+      }
+    },
+    "stat_cost": {
+      "type": "object",
+      "title": "Cost",
+      "properties": {
+        "build_turns": {
+          "type": "integer",
+          "title": "Build Turns",
+          "x-index": 0
+        },
+        "cost_construct": {
+          "type": "integer",
+          "title": "Construct Cost",
+          "x-index": 1
+        },
+        "cost_upkeep": {
+          "type": "integer",
+          "title": "Upkeep Cost",
+          "x-index": 2
+        },
+        "upgrade_weapons": {
+          "type": "integer",
+          "title": "Upgrade Weapons Cost",
+          "x-index": 3
+        },
+        "upgrade_armour": {
+          "type": "integer",
+          "title": "Upgrade Armour Cost",
+          "x-index": 4
+        },
+        "cost_custom": {
+          "type": "integer",
+          "title": "Custom Battle Cost",
+          "x-index": 5
+        }
+      }
+    },
+    "ownership": {
+      "readOnly": true,
+      "type": "array",
+      "title": "Ownership",
+      "items": { "type": "string" }
+    },
+    "ethnicity": {
+      "readOnly": true,
+      "type": "array",
+      "title": "Ethnicities",
+      "items": {
+        "type": "object",
+        "properties": {
+          "faction": { "type": "string" },
+          "home_region": { "type": "string" },
+          "hair_color": { "type": "string" },
+          "tattoo_color": { "type": "string" },
+          "flags": { "type": "array", "items": { "type": "string" } }
+        }
+      }
     }
   },
   "allOf": [{}],

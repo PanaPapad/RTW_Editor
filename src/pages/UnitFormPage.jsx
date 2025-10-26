@@ -24,6 +24,25 @@ export default function UnitFormPage() {
     return SchemaRegistry.getUiSchemaFor(TYPE);
   }, []);
 
+  const computeUiSchema = useCallback(() => {
+    // For future dynamic uiSchema computation based on formData
+    const baseSchema = structuredClone(uiSchema);
+    for (const prop in schema.properties) {
+      if (!baseSchema.hasOwnProperty(prop)) {
+        baseSchema[prop] = {};
+      }
+      if (
+        schema.properties[prop].hasOwnProperty("x-hide") &&
+        schema.properties[prop]["x-hide"] === true
+      ) {
+        baseSchema[prop]["ui:widget"] = "hidden";
+      }
+    }
+    return baseSchema;
+  }, [uiSchema]);
+
+  const computedUiSchema = useMemo(() => computeUiSchema(), [computeUiSchema]);
+
   useEffect(() => {
     if (!schema) {
       navigate("/");
@@ -83,7 +102,7 @@ export default function UnitFormPage() {
           <Form
             schema={schema}
             validator={validator}
-            uiSchema={uiSchema}
+            uiSchema={computedUiSchema}
             formData={formData}
             onChange={onFormChange}
             onSubmit={onFormSubmit}
@@ -93,7 +112,7 @@ export default function UnitFormPage() {
           <h4>Live formData</h4>
           <pre>{JSON.stringify(formData, null, 2)}</pre>
           <h4>Computed uiSchema</h4>
-          <pre>{JSON.stringify(uiSchema, null, 2)}</pre>
+          <pre>{JSON.stringify(computedUiSchema, null, 2)}</pre>
           <h4>Computed Lines</h4>
           <pre>{selectedUnit ? selectedUnit.toString() : ""}</pre>
         </div>
