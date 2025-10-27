@@ -1,4 +1,7 @@
 import React from "react";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+
 export default function ObjectFieldTemplate(props) {
   const {
     TitleField,
@@ -42,19 +45,30 @@ export default function ObjectFieldTemplate(props) {
   }
 
   return (
-    <div className="object-field">
-      {renderTitle()}
-      {renderDescription()}
+    <Paper
+      elevation={0}
+      sx={{
+        border: 1,
+        borderColor: "divider",
+        borderRadius: 1,
+        padding: 1,
+        marginBottom: 1,
+      }}
+    >
+      <Box className="object-field">
+        {renderTitle()}
+        {renderDescription()}
 
-      <div className="form-grid">
-        {orderedProps.map((prop) => (
-          // prop.content is already the rendered field (wrapped by FieldTemplate)
-          // render it directly to avoid extra wrappers that can break layout
-          <React.Fragment key={prop.name || prop.content?.props?.id}>
-            {prop.content}
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
+        <div className="form-grid">
+          {orderedProps.map((prop) => (
+            // prop.content is already the rendered field (wrapped by FieldTemplate)
+            // render it directly to avoid extra wrappers that can break layout
+            <React.Fragment key={prop.name || prop.content?.props?.id}>
+              {prop.content}
+            </React.Fragment>
+          ))}
+        </div>
+      </Box>
+    </Paper>
   );
 }
