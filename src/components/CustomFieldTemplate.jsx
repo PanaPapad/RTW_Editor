@@ -24,11 +24,13 @@ export default function CustomFieldTemplate(props) {
   };
 
   const isNotField = schema?.type === "array" || schema?.type === "object";
-  const hideLabel = uiSchema?.["ui:options"]?.label === false || isNotField;
+  const isNotEnum = !schema?.hasOwnProperty("enum");
+  const hideLabel =
+    uiSchema?.["ui:options"]?.label === false || isNotField || isNotEnum;
   return (
     <div className={classNames} id={id} style={wrapperStyle} hidden={hidden}>
       {!hideLabel && label ? (
-        <label className="field-label">
+        <label className="field-label" style={{ fontSize: "12px" }}>
           {label}
           {required ? " *" : ""}
         </label>

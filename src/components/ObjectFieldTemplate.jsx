@@ -15,7 +15,24 @@ export default function ObjectFieldTemplate(props) {
   const renderTitle = () => {
     if (!title) return null;
     if (typeof TitleField === "function") return <TitleField title={title} />;
-    return <h3>{title}</h3>;
+    return (
+      // floating label positioned over the Paper border to mimic an input label
+      <Box
+        component="span"
+        sx={{
+          display: "inline-block",
+          position: "relative",
+          top: -10,
+          ml: 1,
+          px: 0.5,
+          bgcolor: "background.paper",
+          fontSize: "0.875rem",
+          fontWeight: 500,
+        }}
+      >
+        {title}
+      </Box>
+    );
   };
 
   const renderDescription = () => {
