@@ -1,7 +1,14 @@
-import { ItemList, LoadModal, TextWidget } from "@components/index.jsx";
-import * as Common from "@lib/index.js";
-import { UnitParser } from "@lib/parsers/UnitParser.js";
-import * as SchemaRegistry from "@lib/schemas/registry.js";
+import {
+  ItemList,
+  LoadModal,
+  CustomFieldTemplate,
+  TextWidget,
+  ObjectFieldTemplate,
+} from "../components/index.jsx";
+import * as Common from "../lib/index.js";
+import { UnitParser } from "../lib/parsers/UnitParser.js";
+import * as SchemaRegistry from "../lib/schemas/registry.js";
+import "../styles/form-grid.css";
 import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -18,9 +25,11 @@ export default function UnitFormPage() {
 
   const formRef = useRef(null);
 
-  const widgets = useMemo(
+  const widgets = useMemo(() => ({ TextWidget }), []);
+  const fieldTemplates = useMemo(
     () => ({
-      TextWidget,
+      FieldTemplate: CustomFieldTemplate,
+      ObjectFieldTemplate: ObjectFieldTemplate,
     }),
     []
   );
@@ -114,6 +123,7 @@ export default function UnitFormPage() {
             uiSchema={computedUiSchema}
             formData={formData}
             widgets={widgets}
+            templates={fieldTemplates}
             onChange={onFormChange}
             onSubmit={onFormSubmit}
           />

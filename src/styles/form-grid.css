@@ -1,0 +1,37 @@
+:root{
+  --gap:12px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items:start;
+}
+
+.object-field{
+  margin-bottom:16px;
+}
+
+.field-label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:600;
+  font-size:0.95rem;
+}
+
+.rjsf-input, .rjsf-widget{
+  width:100%;
+  box-sizing:border-box;
+  max-width:100%;
+  overflow-wrap: anywhere;
+}
+
+/* prevent wide labels/controls from causing horizontal scroll */
+.object-field, .form-grid > * {
+  min-width: 0;
+}
+
+@media (max-width:800px){
+  .form-grid{ grid-template-columns: repeat(6, 1fr); }
+}

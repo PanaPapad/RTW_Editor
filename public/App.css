@@ -6,6 +6,7 @@ body {
   display: flex;
   gap: 16px;
   align-items: flex-start;
+  justify-content: space-evenly;
 }
 /* left column: fixed sidebar for item list */
 .left {
@@ -14,7 +15,7 @@ body {
 }
 /* centre column: main flexible content */
 .centre {
-  flex: 0 0 auto;
+  width: 60%;
   min-width: 0; /* allow children to shrink properly */
 }
 .right {
