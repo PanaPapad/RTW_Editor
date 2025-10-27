@@ -305,7 +305,7 @@
   },
   "attributes": {
     "ui:options": {
-      "col": 2
+      "col": 4
     }
   }
 }

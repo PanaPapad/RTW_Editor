@@ -4,6 +4,7 @@ import {
   CustomFieldTemplate,
   TextWidget,
   ObjectFieldTemplate,
+  SelectWidget,
 } from "../components/index.jsx";
 import * as Common from "../lib/index.js";
 import { UnitParser } from "../lib/parsers/UnitParser.js";
@@ -25,7 +26,7 @@ export default function UnitFormPage() {
 
   const formRef = useRef(null);
 
-  const widgets = useMemo(() => ({ TextWidget }), []);
+  const widgets = useMemo(() => ({ TextWidget, SelectWidget }), []);
   const fieldTemplates = useMemo(
     () => ({
       FieldTemplate: CustomFieldTemplate,
