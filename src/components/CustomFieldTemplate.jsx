@@ -10,6 +10,8 @@ export default function CustomFieldTemplate(props) {
     errors,
     children,
     uiSchema,
+    schema,
+    hidden,
   } = props;
 
   // Determine column span from uiSchema options (ui:options.col) or ui:col
@@ -21,10 +23,10 @@ export default function CustomFieldTemplate(props) {
     minWidth: 0,
   };
 
-  const hideLabel = uiSchema?.["ui:options"]?.label === false;
-
+  const isNotField = schema?.type === "array" || schema?.type === "object";
+  const hideLabel = uiSchema?.["ui:options"]?.label === false || isNotField;
   return (
-    <div className={classNames} id={id} style={wrapperStyle}>
+    <div className={classNames} id={id} style={wrapperStyle} hidden={hidden}>
       {!hideLabel && label ? (
         <label className="field-label">
           {label}
