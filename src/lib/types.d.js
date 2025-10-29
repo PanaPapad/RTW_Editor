@@ -11,3 +11,9 @@
  * @property {Array<string>} required
  * @property {Array<string>} [additionalProperties]
  */
+/**
+ * @typedef {Object} Faction
+ * @property {string} name
+ * @property {string} id
+ * @property {string} culture
+ */

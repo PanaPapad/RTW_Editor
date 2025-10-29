@@ -98,7 +98,14 @@ export default function UnitFormPage() {
       }
       if (unitFactionValue && unitFactionValue !== "") {
         // assume units have a `faction` property matching the Consts keys
-        if (!unit.attributes.ownership.includes(unitFactionValue)) return false;
+        if (
+          !unit.attributes.ownership.includes(unitFactionValue) &&
+          !unit.attributes.ownership.includes(
+            Consts.FACTIONS.find((faction) => faction.id === unitFactionValue)
+              ?.culture
+          )
+        )
+          return false;
       }
       return true;
     },
@@ -162,9 +169,9 @@ export default function UnitFormPage() {
             variant="outlined"
           >
             <MenuItem value="">All</MenuItem>
-            {Object.entries(Consts.FACTIONS).map(([key, label]) => (
-              <MenuItem key={key} value={key}>
-                {label}
+            {Consts.FACTIONS.map((faction) => (
+              <MenuItem key={faction.id} value={faction.id}>
+                {faction.name}
               </MenuItem>
             ))}
           </TextField>
