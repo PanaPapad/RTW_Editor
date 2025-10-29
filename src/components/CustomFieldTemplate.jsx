@@ -23,10 +23,7 @@ export default function CustomFieldTemplate(props) {
     minWidth: 0,
   };
 
-  const isNotField = schema?.type === "array" || schema?.type === "object";
-  const isNotEnum = !schema?.hasOwnProperty("enum");
-  const hideLabel =
-    uiSchema?.["ui:options"]?.label === false || isNotField || isNotEnum;
+  const hideLabel = true;
   return (
     <div className={classNames} id={id} style={wrapperStyle} hidden={hidden}>
       {!hideLabel && label ? (
