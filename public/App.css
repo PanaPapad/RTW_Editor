@@ -2,33 +2,6 @@ body {
   font-family: system-ui, Arial;
   margin: 16px;
 }
-.panel {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-evenly;
-}
-/* left column: fixed sidebar for item list */
-.left {
-  flex: 0 0 auto;
-  max-width: auto;
-}
-/* centre column: main flexible content */
-.centre {
-  width: 60%;
-  min-width: 0; /* allow children to shrink properly */
-}
-.right {
-  flex: 0 0 auto;
-  background: #f7f7f7;
-  padding: 12px;
-  border-radius: 6px;
-}
-/* constrain item list inside the left panel so it scrolls nicely */
-.left .item-list {
-  max-height: calc(100vh - 200px);
-  overflow: auto;
-}
 pre {
   white-space: pre-wrap;
   word-break: break-all;

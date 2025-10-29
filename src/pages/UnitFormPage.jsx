@@ -112,8 +112,21 @@ export default function UnitFormPage() {
           Download
         </Button>
       </div>
-      <div className="panel" style={{ display: "flex", gap: 16 }}>
-        <div id="unitList" className="left">
+      <div
+        style={{
+          display: "flex",
+          gap: 16,
+          alignItems: "flex-start",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <div
+          id="unitList"
+          style={{
+            flex: "0 0 auto",
+            minWidth: "0",
+          }}
+        >
           <ItemList
             items={loadedUnits}
             onSelect={(unit) => {
@@ -122,7 +135,13 @@ export default function UnitFormPage() {
             }}
           />
         </div>
-        <div className="centre">
+        <div
+          id="formBox"
+          style={{
+            width: "60%",
+            minWidth: 0,
+          }}
+        >
           <Form
             ref={formRef}
             schema={schema}
@@ -135,7 +154,15 @@ export default function UnitFormPage() {
             onSubmit={onFormSubmit}
           />
         </div>
-        <div className="right">
+        <div
+          id="tabPane"
+          style={{
+            flex: "0 0 auto",
+            background: "#f7f7f7",
+            padding: "12px",
+            borderRadius: "6px",
+          }}
+        >
           <TabbedPane>
             <TabbedPane.Pane title="Live data">
               <h4>Live formData</h4>

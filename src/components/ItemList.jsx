@@ -32,7 +32,6 @@ export default function ItemList({ items, onSelect }) {
 
   return (
     <div
-      className="item-list"
       style={{
         maxHeight: "70vh",
         overflowY: "auto",
