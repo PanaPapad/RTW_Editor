@@ -18,8 +18,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
 const TYPE = "units";
+const factionOptions = Consts.FACTIONS.map((faction) => {
+  return { id: faction.id, label: faction.name };
+});
 
 export default function UnitFormPage() {
   const navigate = useNavigate();
@@ -156,25 +159,32 @@ export default function UnitFormPage() {
             id="unitSearchField"
             label="Search"
             variant="outlined"
+            fullWidth
+            sx={{ mb: 1 }}
             onChange={(event) => {
               setUnitSearchValue(event.target.value);
             }}
           />
-          <TextField
-            id="factionSelectField"
-            select
-            label="Faction"
-            value={unitFactionValue}
-            onChange={(e) => setUnitFactionValue(e.target.value)}
-            variant="outlined"
-          >
-            <MenuItem value="">All</MenuItem>
-            {Consts.FACTIONS.map((faction) => (
-              <MenuItem key={faction.id} value={faction.id}>
-                {faction.name}
-              </MenuItem>
-            ))}
-          </TextField>
+          {/* Searchable, scrollable faction selector using MUI Autocomplete */}
+          <Autocomplete
+            id="factionSelectAutocomplete"
+            options={factionOptions}
+            getOptionLabel={(opt) => opt.label}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(_, newValue) => setUnitFactionValue(newValue?.id ?? "")}
+            renderInput={(params) => (
+              <TextField {...params} label="Faction" variant="outlined" />
+            )}
+            fullWidth
+            sx={{ mb: 1 }}
+            slotProps={{
+              listbox: {
+                style: { maxHeight: 240 },
+              },
+            }}
+            clearOnEscape
+            freeSolo={false}
+          />
           <ItemList
             filter={filterUnitsBy}
             items={loadedUnits}
