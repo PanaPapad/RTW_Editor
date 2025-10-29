@@ -5,6 +5,7 @@ import {
   TextWidget,
   ObjectFieldTemplate,
   SelectWidget,
+  TabbedPane,
 } from "../components/index.jsx";
 import * as Common from "../lib/index.js";
 import { UnitParser } from "../lib/parsers/UnitParser.js";
@@ -14,7 +15,7 @@ import Form from "@rjsf/core";
 import validator from "@rjsf/validator-ajv8";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Button from "@mui/material/Button";
 const TYPE = "units";
 
 export default function UnitFormPage() {
@@ -95,16 +96,21 @@ export default function UnitFormPage() {
     <div>
       <h2>RTW Unit Editor</h2>
       <div style={{ display: "flex", marginBottom: 10 }}>
-        <button onClick={() => setModalOpen(true)}>Load File</button>{" "}
-        <button
+        <Button variant="contained" onClick={() => setModalOpen(true)}>
+          Load File
+        </Button>{" "}
+        <Button
+          variant="contained"
           onClick={() => {
             // reset to registry initial
             setFormData(SchemaRegistry.getInitialFormDataFor(TYPE));
           }}
         >
           Reset
-        </button>
-        <button onClick={downloadEditedFile}>Download</button>
+        </Button>
+        <Button variant="contained" onClick={downloadEditedFile}>
+          Download
+        </Button>
       </div>
       <div className="panel" style={{ display: "flex", gap: 16 }}>
         <div id="unitList" className="left">
@@ -130,12 +136,20 @@ export default function UnitFormPage() {
           />
         </div>
         <div className="right">
-          <h4>Live formData</h4>
-          <pre>{JSON.stringify(formData, null, 2)}</pre>
-          <h4>Computed uiSchema</h4>
-          <pre>{JSON.stringify(computedUiSchema, null, 2)}</pre>
-          <h4>Computed Lines</h4>
-          <pre>{selectedUnit ? selectedUnit.toString() : ""}</pre>
+          <TabbedPane>
+            <TabbedPane.Pane title="Live data">
+              <h4>Live formData</h4>
+              <pre>{JSON.stringify(formData, null, 2)}</pre>
+            </TabbedPane.Pane>
+            <TabbedPane.Pane title="uiSchema">
+              <h4>Computed uiSchema</h4>
+              <pre>{JSON.stringify(computedUiSchema, null, 2)}</pre>
+            </TabbedPane.Pane>
+            <TabbedPane.Pane title="Lines">
+              <h4>Computed Lines</h4>
+              <pre>{selectedUnit ? selectedUnit.toString() : ""}</pre>
+            </TabbedPane.Pane>
+          </TabbedPane>
         </div>
       </div>
       <LoadModal

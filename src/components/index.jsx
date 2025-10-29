@@ -4,3 +4,4 @@ export { default as ItemList } from "./ItemList.jsx";
 export { default as LoadModal } from "./LoadFileModal.jsx";
 export { default as ObjectFieldTemplate } from "./ObjectFieldTemplate.jsx";
 export { default as SelectWidget } from "./SelectWidget.jsx";
+export { default as TabbedPane } from "./TabbedPane.jsx";
