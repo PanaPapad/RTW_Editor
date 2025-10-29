@@ -25,7 +25,7 @@ function Item({ item, onSelect }) {
 }
 
 // Make the list scrollable. Accept an optional `maxHeight` prop so callers can control size.
-export default function ItemList({ items, onSelect }) {
+export default function ItemList({ items, onSelect, filter }) {
   if (!items || items.length === 0) {
     return <div>No items found.</div>;
   }
@@ -40,7 +40,7 @@ export default function ItemList({ items, onSelect }) {
         background: "#fff",
       }}
     >
-      {items.map((item) => (
+      {items.filter(filter).map((item) => (
         <Item key={item.id} item={item} onSelect={onSelect} />
       ))}
     </div>

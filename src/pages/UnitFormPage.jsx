@@ -7,6 +7,7 @@ import {
   SelectWidget,
   TabbedPane,
 } from "../components/index.jsx";
+import * as Consts from "@lib/consts.js";
 import * as Common from "../lib/index.js";
 import { UnitParser } from "../lib/parsers/UnitParser.js";
 import * as SchemaRegistry from "../lib/schemas/registry.js";
@@ -16,6 +17,8 @@ import validator from "@rjsf/validator-ajv8";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 const TYPE = "units";
 
 export default function UnitFormPage() {
@@ -24,6 +27,8 @@ export default function UnitFormPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [loadedUnits, setLoadedUnits] = useState([]);
   const [selectedUnit, setSelectedUnit] = useState(null);
+  const [unitSearchValue, setUnitSearchValue] = useState("");
+  const [unitFactionValue, setUnitFactionValue] = useState("");
 
   const formRef = useRef(null);
 
@@ -86,6 +91,19 @@ export default function UnitFormPage() {
     [selectedUnit, schema]
   );
   const onFormSubmit = useCallback(({ formData }) => {}, []);
+  const filterUnitsBy = useCallback(
+    (unit) => {
+      if (unitSearchValue && unitSearchValue.trim() !== "") {
+        if (!String(unit.id).includes(unitSearchValue)) return false;
+      }
+      if (unitFactionValue && unitFactionValue !== "") {
+        // assume units have a `faction` property matching the Consts keys
+        if (!unit.attributes.ownership.includes(unitFactionValue)) return false;
+      }
+      return true;
+    },
+    [unitSearchValue, unitFactionValue]
+  );
 
   // No render if schema is not found
   if (!schema) {
@@ -127,7 +145,31 @@ export default function UnitFormPage() {
             minWidth: "0",
           }}
         >
+          <TextField
+            id="unitSearchField"
+            label="Search"
+            variant="outlined"
+            onChange={(event) => {
+              setUnitSearchValue(event.target.value);
+            }}
+          />
+          <TextField
+            id="factionSelectField"
+            select
+            label="Faction"
+            value={unitFactionValue}
+            onChange={(e) => setUnitFactionValue(e.target.value)}
+            variant="outlined"
+          >
+            <MenuItem value="">All</MenuItem>
+            {Object.entries(Consts.FACTIONS).map(([key, label]) => (
+              <MenuItem key={key} value={key}>
+                {label}
+              </MenuItem>
+            ))}
+          </TextField>
           <ItemList
+            filter={filterUnitsBy}
             items={loadedUnits}
             onSelect={(unit) => {
               setSelectedUnit(unit);
