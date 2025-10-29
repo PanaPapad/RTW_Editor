@@ -97,7 +97,7 @@ export default function UnitFormPage() {
         if (!String(unit.id).includes(unitSearchValue)) return false;
       }
       if (unitFactionValue && unitFactionValue !== "") {
-        // assume units have a `faction` property matching the Consts keys
+        // Check if the selected faction or its culture matches the unit's ownership
         if (
           !unit.attributes.ownership.includes(unitFactionValue) &&
           !unit.attributes.ownership.includes(
@@ -206,10 +206,14 @@ export default function UnitFormPage() {
         <div
           id="tabPane"
           style={{
-            flex: "0 0 auto",
+            flex: "0 0 20%",
+            width: "20%",
+            boxSizing: "border-box",
             background: "#f7f7f7",
             padding: "12px",
             borderRadius: "6px",
+            height: "70vh",
+            overflow: "hidden",
           }}
         >
           <TabbedPane>
