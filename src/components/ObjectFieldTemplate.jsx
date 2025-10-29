@@ -48,14 +48,14 @@ export default function ObjectFieldTemplate(props) {
     const order = uiSchema?.["ui:order"] ?? uiSchema?.["ui:options"]?.order;
     if (Array.isArray(order) && order.length > 0) {
       const propMapByName = new Map(properties.map((p) => [p.name, p]));
-      const orderedProps = [];
+      const _orderedProps = [];
       for (const key of order) {
         if (propMapByName.has(key)) {
-          orderedProps.push(propMapByName.get(key));
+          _orderedProps.push(propMapByName.get(key));
           propMapByName.delete(key);
         }
       }
-      orderedProps = orderedProps;
+      orderedProps = _orderedProps;
     }
   } catch (e) {
     orderedProps = properties;
