@@ -25,7 +25,7 @@ function Item({ item, onSelect }) {
 }
 
 // Make the list scrollable. Accept an optional `maxHeight` prop so callers can control size.
-export default function ItemList({ items, onSelect, maxHeight = 320 }) {
+export default function ItemList({ items, onSelect }) {
   if (!items || items.length === 0) {
     return <div>No items found.</div>;
   }
@@ -34,7 +34,7 @@ export default function ItemList({ items, onSelect, maxHeight = 320 }) {
     <div
       className="item-list"
       style={{
-        maxHeight: typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight,
+        maxHeight: "70vh",
         overflowY: "auto",
         border: "1px solid #f0f0f0",
         borderRadius: 4,
