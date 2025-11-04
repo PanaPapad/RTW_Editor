@@ -1,7 +1,311 @@
 {
-  "dictionary": {
-    "ui:style": {
-      "display": "none"
+  "ui:order": [
+    "type",
+    "stat_health",
+    "stat_pri",
+    "stat_pri_attr",
+    "stat_sec",
+    "stat_sec_attr",
+    "stat_pri_armour",
+    "stat_sec_armour",
+    "stat_mental",
+    "stat_cost",
+    "stat_heat",
+    "stat_ground",
+    "mount_effect",
+    "attributes",
+    "category",
+    "class",
+    "voice_type",
+    "soldier",
+    "officer",
+    "ship",
+    "engine",
+    "animal",
+    "mount",
+    "dictionary",
+    "formation",
+    "stat_charge_dist",
+    "stat_fire_delay",
+    "stat_food",
+    "ownership",
+    "ethnicity"
+  ],
+  "type": {
+    "ui:options": {
+      "col": 6
+    }
+  },
+  "stat_health": {
+    "ui:order": ["hitpoints_mount", "hitpoints"],
+    "ui:options": {
+      "col": 6
+    },
+    "hitpoints": {
+      "ui:options": {
+        "col": 6
+      }
+    },
+    "hitpoints_mount": {
+      "ui:options": {
+        "col": 6
+      }
+    }
+  },
+  "stat_pri": {
+    "ui:order": [
+      "attack",
+      "charge",
+      "missile_type",
+      "missile_range",
+      "ammo",
+      "weapon_type",
+      "tech",
+      "damage_type",
+      "sound_type",
+      "attack_delay"
+    ],
+    "ui:options": {
+      "col": 6
+    },
+    "attack": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "charge": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "missile_type": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "missile_range": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "ammo": {
+      "ui:widget": "hidden"
+    },
+    "weapon_type": {
+      "ui:widget": "hidden"
+    },
+    "tech": {
+      "ui:widget": "hidden"
+    },
+    "damage_type": {
+      "ui:widget": "hidden"
+    },
+    "sound_type": {
+      "ui:widget": "hidden"
+    },
+    "attack_delay": {
+      "ui:widget": "hidden"
+    }
+  },
+  "stat_pri_attr": {
+    "ui:options": {
+      "col": 6
+    }
+  },
+  "stat_sec": {
+    "ui:order": [
+      "attack",
+      "charge",
+      "missile_type",
+      "missile_range",
+      "ammo",
+      "weapon_type",
+      "tech",
+      "damage_type",
+      "sound_type",
+      "attack_delay"
+    ],
+    "ui:options": {
+      "col": 6
+    },
+    "attack": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "charge": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "missile_type": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "missile_range": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "ammo": {
+      "ui:widget": "hidden"
+    },
+    "weapon_type": {
+      "ui:widget": "hidden"
+    },
+    "tech": {
+      "ui:widget": "hidden"
+    },
+    "damage_type": {
+      "ui:widget": "hidden"
+    },
+    "sound_type": {
+      "ui:widget": "hidden"
+    },
+    "attack_delay": {
+      "ui:widget": "hidden"
+    }
+  },
+  "stat_sec_attr": {
+    "ui:options": {
+      "col": 6
+    }
+  },
+  "stat_pri_armour": {
+    "ui:options": {
+      "col": 6
+    },
+    "armour": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "defence_skill": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "shield": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "sound_type": {
+      "ui:widget": "hidden"
+    }
+  },
+  "stat_sec_armour": {
+    "ui:options": {
+      "col": 6
+    },
+    "armour": {
+      "ui:options": {
+        "col": 6
+      }
+    },
+    "defence_skill": {
+      "ui:options": {
+        "col": 6
+      }
+    },
+    "sound_type": {
+      "ui:widget": "hidden"
+    }
+  },
+  "stat_mental": {
+    "ui:options": {
+      "col": 6
+    },
+    "morale": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "discipline": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "training": {
+      "ui:options": {
+        "col": 4
+      }
+    }
+  },
+  "stat_cost": {
+    "ui:options": {
+      "col": 6
+    },
+    "build_turns": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "cost_construct": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "cost_upkeep": {
+      "ui:options": {
+        "col": 4
+      }
+    },
+    "upgrade_weapons": {
+      "ui:options": {
+        "col": 6
+      }
+    },
+    "upgrade_armour": {
+      "ui:options": {
+        "col": 6
+      }
+    },
+    "cost_custom": {
+      "ui:options": {
+        "col": 12
+      }
+    }
+  },
+  "stat_heat": {
+    "ui:options": {
+      "col": 3
+    }
+  },
+  "stat_ground": {
+    "ui:options": {
+      "col": 5
+    },
+    "scrub": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "sand": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "forest": {
+      "ui:options": {
+        "col": 3
+      }
+    },
+    "snow": {
+      "ui:options": {
+        "col": 3
+      }
+    }
+  },
+  "mount_effect": {
+    "ui:options": {
+      "col": 2
+    }
+  },
+  "attributes": {
+    "ui:options": {
+      "col": 4
     }
   }
 }

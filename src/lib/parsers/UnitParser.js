@@ -143,7 +143,7 @@ export class Unit {
       if (key === "stat_pri_attr" || key === "stat_sec_attr") {
         const rest = parts[1] ?? "";
         const values = rest
-          .split(" ")
+          .split(",")
           .map((s) => s.trim())
           .filter(Boolean);
         attributes[key] = values;

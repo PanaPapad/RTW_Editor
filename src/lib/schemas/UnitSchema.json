@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
-  "title": "Unit Schema for RTW Editor",
+  "$comment": "Unit Schema for RTW Editor",
   "definitions": {
     "stat_pri": {
       "type": "object",
@@ -131,6 +131,7 @@
       "items": {
         "type": "string",
         "enum": [
+          "no",
           "ap",
           "bp",
           "spear",
@@ -141,7 +142,8 @@
           "launching",
           "area"
         ]
-      }
+      },
+      "uniqueItems": true
     }
   },
   "type": "object",
@@ -157,10 +159,10 @@
       "readOnly": true,
       "$comment": "The tag used to look up the on screen name",
       "type": "string",
-      "title": "Unit Tag"
+      "title": "Unit Tag",
+      "x-hide": true
     },
     "category": {
-      "x-hide": true,
       "readOnly": true,
       "type": "string",
       "enum": [
@@ -171,18 +173,21 @@
         "ship",
         "non_combatant"
       ],
-      "title": "Category"
+      "title": "Category",
+      "x-hide": true
     },
     "class": {
       "readOnly": true,
       "type": "string",
       "enum": ["light", "heavy", "missile", "spearmen"],
-      "title": "Class"
+      "title": "Class",
+      "x-hide": true
     },
     "voice_type": {
       "type": "string",
       "readOnly": true,
-      "title": "Voice Type"
+      "title": "Voice Type",
+      "x-hide": true
     },
     "soldier": {
       "readOnly": true,
@@ -213,7 +218,8 @@
           "title": "Collision Mass",
           "x-index": 3
         }
-      }
+      },
+      "x-hide": true
     },
     "officer": {
       "readOnly": true,
@@ -222,27 +228,32 @@
       "items": {
         "type": "string",
         "title": "Officer Model"
-      }
+      },
+      "x-hide": true
     },
     "ship": {
       "readOnly": true,
       "type": "string",
-      "title": "Type of Ship"
+      "title": "Type of Ship",
+      "x-hide": true
     },
     "engine": {
       "readOnly": true,
       "type": "string",
-      "title": "Siege Engine"
+      "title": "Siege Engine",
+      "x-hide": true
     },
     "animal": {
       "readOnly": true,
       "type": "string",
-      "title": "Non-ridden Animal"
+      "title": "Non-ridden Animal",
+      "x-hide": true
     },
     "mount": {
       "readOnly": true,
       "type": "string",
-      "title": "Animal/Vehicle"
+      "title": "Animal/Vehicle",
+      "x-hide": true
     },
     "mount_effect": {
       "readOnly": true,
@@ -250,7 +261,9 @@
       "title": "Mount Effect",
       "items": {
         "type": "string"
-      }
+      },
+      "x-hide": true,
+      "uniqueItems": true
     },
     "attributes": {
       "type": "array",
@@ -260,8 +273,12 @@
         "enum": [
           "sea_faring",
           "hide_forest",
+          "hide_improved_forest",
+          "hide_long_grass",
+          "hide_anywhere",
           "can_sap",
           "frighten_foot",
+          "frighten_mounted",
           "can_run_amok",
           "general_unit",
           "cantabrian_circle",
@@ -271,9 +288,11 @@
           "hardy",
           "very_hardy",
           "warcry",
-          "druid"
+          "druid",
+          "general_unit_upgrade \"marian_reforms\""
         ]
-      }
+      },
+      "uniqueItems": true
     },
     "formation": {
       "readOnly": true,
@@ -322,7 +341,8 @@
           "title": "Formations 2",
           "x-index": 6
         }
-      }
+      },
+      "x-hide": true
     },
     "stat_health": {
       "type": "object",
@@ -452,13 +472,15 @@
       "readOnly": true,
       "type": "integer",
       "title": "Charge Distance",
-      "x-index": 0
+      "x-index": 0,
+      "x-hide": true
     },
     "stat_fire_delay": {
       "readOnly": true,
       "type": "integer",
       "title": "Fire Delay",
-      "x-index": 0
+      "x-index": 0,
+      "x-hide": true
     },
     "stat_food": {
       "readOnly": true,
@@ -467,7 +489,8 @@
       "properties": {
         "food_1": { "type": "integer", "title": "Food 1", "x-index": 0 },
         "food_2": { "type": "integer", "title": "Food 2", "x-index": 1 }
-      }
+      },
+      "x-hide": true
     },
     "stat_cost": {
       "type": "object",
@@ -509,7 +532,8 @@
       "readOnly": true,
       "type": "array",
       "title": "Ownership",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "x-hide": true
     },
     "ethnicity": {
       "readOnly": true,
@@ -524,7 +548,8 @@
           "tattoo_color": { "type": "string" },
           "flags": { "type": "array", "items": { "type": "string" } }
         }
-      }
+      },
+      "x-hide": true
     }
   },
   "allOf": [{}],
