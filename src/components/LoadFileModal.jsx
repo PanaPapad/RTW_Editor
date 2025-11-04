@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Input, Button } from "@mui/material";
 import { UnitParser } from "../lib/parsers/UnitParser.js";
 
 export default function LoadModal({ open, onClose, onLoad }) {
@@ -90,6 +91,7 @@ export default function LoadModal({ open, onClose, onLoad }) {
           gap: 12,
         }}
       >
+        {/* Left Side */}
         <div
           style={{ flex: 1, borderRight: "1px solid #eee", paddingRight: 12 }}
         >
@@ -97,29 +99,41 @@ export default function LoadModal({ open, onClose, onLoad }) {
           <p>
             Choose a single exported file from the game or your edited file.
           </p>
-          <input type="file" accept=".txt,text/plain" onChange={handleFile} />
+          <Button component="label" role={undefined} variant="contained">
+            Upload File
+            <Input
+              style={{
+                display: "none",
+              }}
+              type="file"
+              inputProps={{ accept: ".txt,text/plain" }}
+              onChange={handleFile}
+            />
+          </Button>
           {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
         </div>
-
+        {/* Right Side */}
         <div style={{ width: 260, paddingLeft: 12 }}>
           <h3>Load vanilla file</h3>
           <p>Load the bundled vanilla sample from the app (public/Samples).</p>
-          <button
+          <Button
+            variant="contained"
             onClick={handleLoadVanilla}
             disabled={loading}
             style={{ display: "block", marginBottom: 8 }}
           >
             {loading ? "Loading…" : "Load vanilla file"}
-          </button>
+          </Button>
 
           <div style={{ marginTop: 18 }}>
-            <button
+            <Button
+              variant="contained"
               onClick={onClose}
               disabled={loading}
               style={{ marginRight: 8 }}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       </div>
