@@ -194,9 +194,9 @@ export class Unit {
   /**
    * Resolve a local JSON Schema reference.
    * This supports only local refs like '#/definitions/...' within the same schema.
-   * @param {UnitSchema} rootSchema The root schema
+   * @param {JsonSchema7} rootSchema The root schema
    * @param {string} ref The reference string
-   * @returns {UnitSchemaProperty|null} The resolved schema property or null if not found
+   * @returns {JsonSchema7|null} The resolved schema property or null if not found
    */
   static resolveLocalRef(rootSchema, ref) {
     if (typeof ref !== "string") return null;
@@ -223,7 +223,7 @@ export class Unit {
   }
   /**
    * Get form data for this unit based on provided schema
-   * @param {UnitSchema} schema
+   * @param {JsonSchema7} schema
    * @returns {Object} The form data object
    */
   getFormData(schema) {
@@ -274,7 +274,7 @@ export class Unit {
   /**
    * Set unit properties from form data based on provided schema
    * @param {Object} formData The form data object
-   * @param {UnitSchema} schema The JSON Schema of the form
+   * @param {JsonSchema7} schema The JSON Schema of the form
    */
   loadFormData(formData, schema) {
     for (const key of Object.keys(formData)) {
