@@ -1,4 +1,5 @@
-import "../types.d.js";
+import "@lib/types.d";
+import * as SchemaHelpers from "@lib/schemas/SchemaHelpers";
 /**
  * A class representing a Unit with its attributes
  */
@@ -208,36 +209,6 @@ export class Unit {
     return true;
   }
   /**
-   * Resolve a local JSON Schema reference.
-   * This supports only local refs like '#/definitions/...' within the same schema.
-   * @param {JsonSchema7} rootSchema The root schema
-   * @param {string} ref The reference string
-   * @returns {JsonSchema7|null} The resolved schema property or null if not found
-   */
-  static resolveLocalRef(rootSchema, ref) {
-    if (typeof ref !== "string") return null;
-    if (!ref.startsWith("#/")) return null; // only local refs supported here
-    const parts = ref.slice(2).split("/");
-    let node = rootSchema;
-    for (const p of parts) {
-      // Traverse down the schema until the referenced node is found
-      if (node && Object.prototype.hasOwnProperty.call(node, p)) {
-        node = node[p];
-      } else {
-        node = null;
-        break;
-      }
-    }
-    // If the referenced node is not found, return null
-    if (node == null) return null;
-    // Deep clone to avoid accidental mutation of original schema
-    try {
-      return JSON.parse(JSON.stringify(node));
-    } catch (e) {
-      return node;
-    }
-  }
-  /**
    * Get form data for this unit based on provided schema
    * @param {JsonSchema7} schema
    * @returns {Object} The form data object
@@ -251,7 +222,7 @@ export class Unit {
       let propSchema = schema.properties[key];
 
       if (propSchema && propSchema.$ref) {
-        const resolved = Unit.resolveLocalRef(schema, propSchema.$ref);
+        const resolved = SchemaHelpers.resolveLocalRef(schema, propSchema.$ref);
         if (resolved) propSchema = resolved;
       }
       // If the property schema is an object with properties (like stat_pri), map each named
@@ -301,7 +272,7 @@ export class Unit {
       let attrSchema = schema.properties[key];
       // Resolve $ref if present
       if (attrSchema && attrSchema.$ref) {
-        const resolved = Unit.resolveLocalRef(schema, attrSchema.$ref);
+        const resolved = SchemaHelpers.resolveLocalRef(schema, attrSchema.$ref);
         if (resolved) attrSchema = resolved;
       }
 
