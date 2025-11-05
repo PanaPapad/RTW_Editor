@@ -4,6 +4,32 @@ import "../types.d.js";
  */
 export class Unit {
   /**
+   * @property {string} id - The unique identifier for the unit
+   */
+  id;
+  /**
+   * @property {string} name - The name of the unit
+   */
+  name;
+  /**
+   * @private
+   * @property {Array<string>} _lines - The original raw lines of the unit
+   */
+  _lines;
+  /**
+   * @property {Object<string, Array<string>>} attributes - The attributes of the unit
+   */
+  attributes;
+  /**
+   * @property {Object<string, Array<string>>} attributesRebalanced - The rebalanced attributes of the unit
+   */
+  attributesRebalanced;
+  /**
+   * @property {Array<Array<string>>} ethnicities - The ethnicities of the unit
+   */
+  ethnicities;
+
+  /**
    * Create a Unit instance
    * @constructor
    * @param {string} name The unit name
@@ -12,26 +38,10 @@ export class Unit {
   constructor(id, name, lines) {
     this.id = id;
     this.name = name;
-    /**
-     * Original raw lines (copy)
-     * @type {Array<string>}
-     */
     this._lines = Array.isArray(lines) ? lines.slice() : [];
-    /**
-     * Unit attributes
-     * @type {Object<string, Array<string>>}
-     */
-    this.attributes = {}; // key -> Array<string>
-    /**
-     * Rebalanced attributes
-     * @type {Object<string, Array<string>>}
-     */
+    this.attributes = {};
     this.attributesRebalanced = {};
-    /**
-     * Ethnicities
-     * @type {Array<Array<string>>}
-     */
-    this.ethnicities = []; // array of arrays
+    this.ethnicities = [];
     this._parseAttributes(this._lines);
   }
 
@@ -62,8 +72,10 @@ export class Unit {
         continue;
       }
       if (!vals || vals.length === 0) {
+        // Key with no values (boolean flag)
         out.push(key);
       } else {
+        // Key with values
         out.push(`${key.padEnd(16, " ")} ${vals.join(", ")}`);
       }
     }
@@ -99,12 +111,14 @@ export class Unit {
    * @param {Array<string>} lines
    */
   _parseAttributes(lines) {
-    const target = { current: this.attributes };
     let attributes = this.attributes;
     for (const raw of lines) {
       const line = (raw ?? "").trim();
       // Skip empty lines and comments
-      if (!line || line.startsWith(";") || line.startsWith("//")) continue;
+      if (!line || line.startsWith(";") || line.startsWith("//")) {
+        continue;
+      }
+
       // split key and value
       const parts = [];
       const firstSpaceIdx = line.search(/\s/);
@@ -115,6 +129,7 @@ export class Unit {
         parts.push(line.substring(firstSpaceIdx + 1).trim());
       }
       const key = parts[0];
+
       // switch to rebalanced section
       if (key === "rebalance_statblock") {
         attributes = this.attributesRebalanced;
@@ -154,6 +169,7 @@ export class Unit {
         attributes[key] = [];
         continue;
       }
+      // Common case: key with comma-separated values
       const rest = parts[1] ?? "";
       const values = rest.split(",").map((s) => s.trim());
       attributes[key] = values;
@@ -162,7 +178,7 @@ export class Unit {
   /**
    * Get unit property value
    * @param {string} name The attribute name
-   * @param {number} idx The index of the property (for multi-valued attributes)
+   * @param {number} [idx] The index of the property (for multi-valued attributes), default 0
    * @returns {string|number|null} The property value or null if not found
    */
   getUnitProperty(name, idx = 0) {
@@ -332,7 +348,7 @@ export class UnitParser {
   static parse(text) {
     /** @type {Array<Unit>} */
     const units = [];
-    const lines = text.replace(/\r\n/g, "\n").split("\n");
+    const lines = text.replace(/\r\n/g, "\n").split("\n"); // Replace CRLF with LF and split into lines
     /** @type {Array<string>} */
     let currentLines = [];
     let currentName = null;
@@ -351,7 +367,7 @@ export class UnitParser {
       } else if (trimmed.startsWith("dictionary ")) {
         // extract name after first space
         currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
-        const name = trimmed.split(";", 2)[1].trim() ?? "";
+        const name = trimmed.split(";", 2)[1].trim() ?? currentId.toString();
         currentName = name;
       }
       if (currentName !== null) {
