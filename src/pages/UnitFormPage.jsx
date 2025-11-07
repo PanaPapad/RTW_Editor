@@ -1,15 +1,15 @@
 import { ItemList, LoadModal, TabbedPane } from "../components/index.jsx";
 import * as Consts from "@lib/consts.js";
-import * as Common from "../lib/index.js";
-import { UnitParser } from "../lib/parsers/UnitParser.js";
-import * as SchemaRegistry from "../lib/schemas/registry.js";
+import * as Common from "@lib/index.js";
+import { UnitParser } from "@lib/parsers/UnitParser.js";
+import * as SchemaRegistry from "@lib/schemas/registry.js";
 import "../styles/form-grid.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import JsonSchemaForm from "../components/JsonSchemaForm.jsx";
+import JsonSchemaForm from "@components/JsonSchemaForm.jsx";
 const TYPE = "units";
 const factionOptions = Consts.FACTIONS.map((faction) => {
   return { id: faction.id, label: faction.name };
