@@ -2,7 +2,7 @@ import UnitSchema from "./UnitSchema.json";
 import UnitUiSchema from "./UnitUiSchema.json";
 
 /**
- * @type {Record<string, {sampleFilePath: string, schema: object, uiSchema: object, initialData: object}>}
+ * @type {Record<string, {sampleFilePath: string, schema: JsonSchema7, uiSchema: object, initialData: object}>}
  */
 const registry = {
   units: {
@@ -25,7 +25,7 @@ const registry = {
 /**
  * Get the JSON schema for a given editor type
  * @param {string} type The editor type
- * @returns {object|null} The JSON schema or null if not found
+ * @returns {JsonSchema7|null} The JSON schema or null if not found
  */
 export function getSchemaFor(type) {
   return registry[type]?.schema ?? null;
