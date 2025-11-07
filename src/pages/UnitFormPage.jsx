@@ -1,24 +1,15 @@
-import {
-  ItemList,
-  LoadModal,
-  CustomFieldTemplate,
-  TextWidget,
-  ObjectFieldTemplate,
-  SelectWidget,
-  TabbedPane,
-} from "../components/index.jsx";
+import { ItemList, LoadModal, TabbedPane } from "../components/index.jsx";
 import * as Consts from "@lib/consts.js";
 import * as Common from "../lib/index.js";
 import { UnitParser } from "../lib/parsers/UnitParser.js";
 import * as SchemaRegistry from "../lib/schemas/registry.js";
 import "../styles/form-grid.css";
-import Form from "@rjsf/core";
-import validator from "@rjsf/validator-ajv8";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import JsonSchemaForm from "../components/JsonSchemaForm.jsx";
 const TYPE = "units";
 const factionOptions = Consts.FACTIONS.map((faction) => {
   return { id: faction.id, label: faction.name };
@@ -34,15 +25,6 @@ export default function UnitFormPage() {
   const [unitFactionValue, setUnitFactionValue] = useState("");
 
   const formRef = useRef(null);
-
-  const widgets = useMemo(() => ({ TextWidget, SelectWidget }), []);
-  const fieldTemplates = useMemo(
-    () => ({
-      FieldTemplate: CustomFieldTemplate,
-      ObjectFieldTemplate: ObjectFieldTemplate,
-    }),
-    []
-  );
 
   const schema = useMemo(() => {
     return SchemaRegistry.getSchemaFor(TYPE);
@@ -201,14 +183,11 @@ export default function UnitFormPage() {
             minWidth: 0,
           }}
         >
-          <Form
+          <JsonSchemaForm
             ref={formRef}
             schema={schema}
-            validator={validator}
             uiSchema={computedUiSchema}
             formData={formData}
-            widgets={widgets}
-            templates={fieldTemplates}
             onChange={onFormChange}
             onSubmit={onFormSubmit}
           />
