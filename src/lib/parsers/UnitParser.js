@@ -58,7 +58,7 @@ export class Unit {
    * @returns {string}
    */
   toString() {
-    return this.toLines().join("\n");
+    return this.toLines().join("\r\n");
   }
   /**
    * Convert unit to array of lines
@@ -68,8 +68,13 @@ export class Unit {
     const out = [];
     // normal attributes
     for (const [key, vals] of Object.entries(this.attributes)) {
-      if (key === "ethnicity") {
-        // ethnicity handled later
+      if (key === "ownership") {
+        // Push the ownership line and always follow with ethnicities
+        out.push(`${key.padEnd(16, " ")} ${vals.join(", ")}`);
+        // ethnicities (preserve multiple lines)
+        for (const eth of this.ethnicities) {
+          out.push(`ethnicity ${eth.join(", ")}`);
+        }
         continue;
       }
       if (!vals || vals.length === 0) {
@@ -79,10 +84,6 @@ export class Unit {
         // Key with values
         out.push(`${key.padEnd(16, " ")} ${vals.join(", ")}`);
       }
-    }
-    // ethnicities (preserve multiple lines)
-    for (const eth of this.ethnicities) {
-      out.push(`ethnicity ${eth.join(", ")}`);
     }
     // rebalance marker + rebalanced attributes
     if (Object.keys(this.attributesRebalanced).length > 0) {
@@ -335,13 +336,14 @@ export class UnitParser {
           units.push(new Unit(currentId, currentName, currentLines));
           currentLines = [];
         }
+        currentId = trimmed.split("type")[1].trim() ?? "";
       } else if (trimmed.startsWith("dictionary ")) {
         // extract name after first space
-        currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
+        //currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
         const name = trimmed.split(";", 2)[1].trim() ?? currentId.toString();
         currentName = name;
       }
-      if (currentName !== null) {
+      if (currentId !== null) {
         currentLines.push(l.replace(/\r$/, ""));
       }
     }
@@ -360,8 +362,8 @@ export class UnitParser {
   static serialize(units) {
     // join each unit's toString and separate by two blank lines
     return (
-      units.map((u) => u.toString()).join("\n \n \n") +
-      (units.length ? "\n" : "")
+      units.map((u) => u.toString()).join("\r\n \r\n \r\n") +
+      (units.length ? "\r\n" : "")
     );
   }
 }
