@@ -33,7 +33,7 @@ export default function UnitFormPage() {
     return SchemaRegistry.getUiSchemaFor(TYPE);
   }, []);
 
-  const computeUiSchema = useCallback(() => {
+  const computeUiSchema = () => {
     // For future dynamic uiSchema computation based on formData
     const baseSchema = structuredClone(uiSchema);
     for (const prop in schema.properties) {
@@ -48,9 +48,9 @@ export default function UnitFormPage() {
       }
     }
     return baseSchema;
-  }, [uiSchema]);
+  };
 
-  const computedUiSchema = useMemo(() => computeUiSchema(), [computeUiSchema]);
+  const computedUiSchema = useMemo(() => computeUiSchema(), [formData]);
 
   useEffect(() => {
     if (!schema) {
