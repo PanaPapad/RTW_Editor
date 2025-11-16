@@ -134,7 +134,7 @@ export default function UnitFormPage() {
           id="unitList"
           style={{
             flex: "0 0 auto",
-            minWidth: "0",
+            minWidth: "200px",
           }}
         >
           <TextField
@@ -179,8 +179,9 @@ export default function UnitFormPage() {
         <div
           id="formBox"
           style={{
+            flex: "0 0 auto",
             width: "60%",
-            minWidth: 0,
+            minWidth: "320px",
           }}
         >
           <JsonSchemaForm
@@ -201,11 +202,16 @@ export default function UnitFormPage() {
             background: "#f7f7f7",
             padding: "12px",
             borderRadius: "6px",
-            height: "70vh",
-            overflow: "hidden",
+            overflow: "auto",
+            minWidth: "200px",
           }}
         >
-          <TabbedPane>
+          <TabbedPane
+            sx={{
+              maxHeight: "70vh",
+              overflowY: "auto",
+            }}
+          >
             <TabbedPane.Pane title="Live data">
               <h4>Live formData</h4>
               <pre>{JSON.stringify(formData, null, 2)}</pre>
