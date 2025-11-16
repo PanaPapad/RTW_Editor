@@ -1,24 +1,15 @@
-import {
-  ItemList,
-  LoadModal,
-  CustomFieldTemplate,
-  TextWidget,
-  ObjectFieldTemplate,
-  SelectWidget,
-  TabbedPane,
-} from "../components/index.jsx";
+import JsonSchemaForm from "@components/JsonSchemaForm.jsx";
 import * as Consts from "@lib/consts.js";
-import * as Common from "../lib/index.js";
-import { UnitParser } from "../lib/parsers/UnitParser.js";
-import * as SchemaRegistry from "../lib/schemas/registry.js";
-import "../styles/form-grid.css";
-import Form from "@rjsf/core";
-import validator from "@rjsf/validator-ajv8";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import * as Common from "@lib/index.js";
+import { UnitParser } from "@lib/parsers/UnitParser.js";
+import * as SchemaRegistry from "@lib/schemas/registry.js";
+import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ItemList, LoadModal, TabbedPane } from "../components/index.jsx";
+import "../styles/form-grid.css";
 const TYPE = "units";
 const factionOptions = Consts.FACTIONS.map((faction) => {
   return { id: faction.id, label: faction.name };
@@ -35,15 +26,6 @@ export default function UnitFormPage() {
 
   const formRef = useRef(null);
 
-  const widgets = useMemo(() => ({ TextWidget, SelectWidget }), []);
-  const fieldTemplates = useMemo(
-    () => ({
-      FieldTemplate: CustomFieldTemplate,
-      ObjectFieldTemplate: ObjectFieldTemplate,
-    }),
-    []
-  );
-
   const schema = useMemo(() => {
     return SchemaRegistry.getSchemaFor(TYPE);
   }, []);
@@ -51,7 +33,7 @@ export default function UnitFormPage() {
     return SchemaRegistry.getUiSchemaFor(TYPE);
   }, []);
 
-  const computeUiSchema = useCallback(() => {
+  const computeUiSchema = () => {
     // For future dynamic uiSchema computation based on formData
     const baseSchema = structuredClone(uiSchema);
     for (const prop in schema.properties) {
@@ -66,9 +48,9 @@ export default function UnitFormPage() {
       }
     }
     return baseSchema;
-  }, [uiSchema]);
+  };
 
-  const computedUiSchema = useMemo(() => computeUiSchema(), [computeUiSchema]);
+  const computedUiSchema = useMemo(() => computeUiSchema(), [formData]);
 
   useEffect(() => {
     if (!schema) {
@@ -152,7 +134,7 @@ export default function UnitFormPage() {
           id="unitList"
           style={{
             flex: "0 0 auto",
-            minWidth: "0",
+            minWidth: "200px",
           }}
         >
           <TextField
@@ -197,18 +179,16 @@ export default function UnitFormPage() {
         <div
           id="formBox"
           style={{
+            flex: "0 0 auto",
             width: "60%",
-            minWidth: 0,
+            minWidth: "320px",
           }}
         >
-          <Form
+          <JsonSchemaForm
             ref={formRef}
             schema={schema}
-            validator={validator}
             uiSchema={computedUiSchema}
             formData={formData}
-            widgets={widgets}
-            templates={fieldTemplates}
             onChange={onFormChange}
             onSubmit={onFormSubmit}
           />
@@ -222,11 +202,16 @@ export default function UnitFormPage() {
             background: "#f7f7f7",
             padding: "12px",
             borderRadius: "6px",
-            height: "70vh",
-            overflow: "hidden",
+            overflow: "auto",
+            minWidth: "200px",
           }}
         >
-          <TabbedPane>
+          <TabbedPane
+            sx={{
+              maxHeight: "70vh",
+              overflowY: "auto",
+            }}
+          >
             <TabbedPane.Pane title="Live data">
               <h4>Live formData</h4>
               <pre>{JSON.stringify(formData, null, 2)}</pre>

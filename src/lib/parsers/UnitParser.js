@@ -1,8 +1,35 @@
-import "../types.d.js";
+import "@lib/types.d";
+import * as SchemaHelpers from "@lib/schemas/SchemaHelpers";
 /**
  * A class representing a Unit with its attributes
  */
 export class Unit {
+  /**
+   * @property {string} id - The unique identifier for the unit
+   */
+  id;
+  /**
+   * @property {string} name - The name of the unit
+   */
+  name;
+  /**
+   * @private
+   * @property {Array<string>} _lines - The original raw lines of the unit
+   */
+  _lines;
+  /**
+   * @property {Object<string, Array<string>>} attributes - The attributes of the unit
+   */
+  attributes;
+  /**
+   * @property {Object<string, Array<string>>} attributesRebalanced - The rebalanced attributes of the unit
+   */
+  attributesRebalanced;
+  /**
+   * @property {Array<Array<string>>} ethnicities - The ethnicities of the unit
+   */
+  ethnicities;
+
   /**
    * Create a Unit instance
    * @constructor
@@ -12,26 +39,10 @@ export class Unit {
   constructor(id, name, lines) {
     this.id = id;
     this.name = name;
-    /**
-     * Original raw lines (copy)
-     * @type {Array<string>}
-     */
     this._lines = Array.isArray(lines) ? lines.slice() : [];
-    /**
-     * Unit attributes
-     * @type {Object<string, Array<string>>}
-     */
-    this.attributes = {}; // key -> Array<string>
-    /**
-     * Rebalanced attributes
-     * @type {Object<string, Array<string>>}
-     */
+    this.attributes = {};
     this.attributesRebalanced = {};
-    /**
-     * Ethnicities
-     * @type {Array<Array<string>>}
-     */
-    this.ethnicities = []; // array of arrays
+    this.ethnicities = [];
     this._parseAttributes(this._lines);
   }
 
@@ -47,7 +58,7 @@ export class Unit {
    * @returns {string}
    */
   toString() {
-    return this.toLines().join("\n");
+    return this.toLines().join("\r\n");
   }
   /**
    * Convert unit to array of lines
@@ -57,19 +68,22 @@ export class Unit {
     const out = [];
     // normal attributes
     for (const [key, vals] of Object.entries(this.attributes)) {
-      if (key === "ethnicity") {
-        // ethnicity handled later
+      if (key === "ownership") {
+        // Push the ownership line and always follow with ethnicities
+        out.push(`${key.padEnd(16, " ")} ${vals.join(", ")}`);
+        // ethnicities (preserve multiple lines)
+        for (const eth of this.ethnicities) {
+          out.push(`ethnicity ${eth.join(", ")}`);
+        }
         continue;
       }
       if (!vals || vals.length === 0) {
+        // Key with no values (boolean flag)
         out.push(key);
       } else {
+        // Key with values
         out.push(`${key.padEnd(16, " ")} ${vals.join(", ")}`);
       }
-    }
-    // ethnicities (preserve multiple lines)
-    for (const eth of this.ethnicities) {
-      out.push(`ethnicity ${eth.join(", ")}`);
     }
     // rebalance marker + rebalanced attributes
     if (Object.keys(this.attributesRebalanced).length > 0) {
@@ -99,12 +113,14 @@ export class Unit {
    * @param {Array<string>} lines
    */
   _parseAttributes(lines) {
-    const target = { current: this.attributes };
     let attributes = this.attributes;
     for (const raw of lines) {
       const line = (raw ?? "").trim();
       // Skip empty lines and comments
-      if (!line || line.startsWith(";") || line.startsWith("//")) continue;
+      if (!line || line.startsWith(";") || line.startsWith("//")) {
+        continue;
+      }
+
       // split key and value
       const parts = [];
       const firstSpaceIdx = line.search(/\s/);
@@ -115,6 +131,7 @@ export class Unit {
         parts.push(line.substring(firstSpaceIdx + 1).trim());
       }
       const key = parts[0];
+
       // switch to rebalanced section
       if (key === "rebalance_statblock") {
         attributes = this.attributesRebalanced;
@@ -154,6 +171,7 @@ export class Unit {
         attributes[key] = [];
         continue;
       }
+      // Common case: key with comma-separated values
       const rest = parts[1] ?? "";
       const values = rest.split(",").map((s) => s.trim());
       attributes[key] = values;
@@ -162,7 +180,7 @@ export class Unit {
   /**
    * Get unit property value
    * @param {string} name The attribute name
-   * @param {number} idx The index of the property (for multi-valued attributes)
+   * @param {number} [idx] The index of the property (for multi-valued attributes), default 0
    * @returns {string|number|null} The property value or null if not found
    */
   getUnitProperty(name, idx = 0) {
@@ -192,38 +210,8 @@ export class Unit {
     return true;
   }
   /**
-   * Resolve a local JSON Schema reference.
-   * This supports only local refs like '#/definitions/...' within the same schema.
-   * @param {UnitSchema} rootSchema The root schema
-   * @param {string} ref The reference string
-   * @returns {UnitSchemaProperty|null} The resolved schema property or null if not found
-   */
-  static resolveLocalRef(rootSchema, ref) {
-    if (typeof ref !== "string") return null;
-    if (!ref.startsWith("#/")) return null; // only local refs supported here
-    const parts = ref.slice(2).split("/");
-    let node = rootSchema;
-    for (const p of parts) {
-      // Traverse down the schema until the referenced node is found
-      if (node && Object.prototype.hasOwnProperty.call(node, p)) {
-        node = node[p];
-      } else {
-        node = null;
-        break;
-      }
-    }
-    // If the referenced node is not found, return null
-    if (node == null) return null;
-    // Deep clone to avoid accidental mutation of original schema
-    try {
-      return JSON.parse(JSON.stringify(node));
-    } catch (e) {
-      return node;
-    }
-  }
-  /**
    * Get form data for this unit based on provided schema
-   * @param {UnitSchema} schema
+   * @param {JsonSchema7} schema
    * @returns {Object} The form data object
    */
   getFormData(schema) {
@@ -235,7 +223,7 @@ export class Unit {
       let propSchema = schema.properties[key];
 
       if (propSchema && propSchema.$ref) {
-        const resolved = Unit.resolveLocalRef(schema, propSchema.$ref);
+        const resolved = SchemaHelpers.resolveLocalRef(schema, propSchema.$ref);
         if (resolved) propSchema = resolved;
       }
       // If the property schema is an object with properties (like stat_pri), map each named
@@ -274,7 +262,7 @@ export class Unit {
   /**
    * Set unit properties from form data based on provided schema
    * @param {Object} formData The form data object
-   * @param {UnitSchema} schema The JSON Schema of the form
+   * @param {JsonSchema7} schema The JSON Schema of the form
    */
   loadFormData(formData, schema) {
     for (const key of Object.keys(formData)) {
@@ -285,7 +273,7 @@ export class Unit {
       let attrSchema = schema.properties[key];
       // Resolve $ref if present
       if (attrSchema && attrSchema.$ref) {
-        const resolved = Unit.resolveLocalRef(schema, attrSchema.$ref);
+        const resolved = SchemaHelpers.resolveLocalRef(schema, attrSchema.$ref);
         if (resolved) attrSchema = resolved;
       }
 
@@ -332,7 +320,7 @@ export class UnitParser {
   static parse(text) {
     /** @type {Array<Unit>} */
     const units = [];
-    const lines = text.replace(/\r\n/g, "\n").split("\n");
+    const lines = text.replace(/\r\n/g, "\n").split("\n"); // Replace CRLF with LF and split into lines
     /** @type {Array<string>} */
     let currentLines = [];
     let currentName = null;
@@ -348,13 +336,14 @@ export class UnitParser {
           units.push(new Unit(currentId, currentName, currentLines));
           currentLines = [];
         }
+        currentId = trimmed.split("type")[1].trim() ?? "";
       } else if (trimmed.startsWith("dictionary ")) {
         // extract name after first space
-        currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
-        const name = trimmed.split(";", 2)[1].trim() ?? "";
+        //currentId = trimmed.split(/\s+/, 2)[1].trim() ?? "";
+        const name = trimmed.split(";", 2)[1].trim() ?? currentId.toString();
         currentName = name;
       }
-      if (currentName !== null) {
+      if (currentId !== null) {
         currentLines.push(l.replace(/\r$/, ""));
       }
     }
@@ -373,8 +362,8 @@ export class UnitParser {
   static serialize(units) {
     // join each unit's toString and separate by two blank lines
     return (
-      units.map((u) => u.toString()).join("\n \n \n") +
-      (units.length ? "\n" : "")
+      units.map((u) => u.toString()).join("\r\n \r\n \r\n") +
+      (units.length ? "\r\n" : "")
     );
   }
 }

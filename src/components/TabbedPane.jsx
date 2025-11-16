@@ -24,7 +24,7 @@ export default function TabbedPane({ children, defaultIndex = 0, sx }) {
           <Tab key={i} label={label} />
         ))}
       </Tabs>
-      <Box sx={{ mt: 1, maxHeight: "70vh", overflowY: "auto" }}>
+      <Box sx={{ mt: 1, overflowY: "auto" }}>
         {panes[index] && panes[index].props && panes[index].props.children}
       </Box>
     </Box>
